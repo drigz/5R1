@@ -7,8 +7,6 @@ function draw_bump(granularity)
     b = bump(x,y);
     b(bump_penalty(x,y) ~= 0) = NaN;
     
-    figure(1);
     h = surf(x,y,b);
     set(h, 'edgecolor', 'none');
-    set(figure(1), 'Name', 'Bump');
     view(176,36);
