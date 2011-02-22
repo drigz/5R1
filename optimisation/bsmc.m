@@ -59,7 +59,7 @@ function ark = bsmc(f, x_range, y_range, penalty, m, pressure, ark)
         
         % Rank regions on average objective
         region_avg = region_sum ./ region_n;
-        [avgs, ix] = sort(reshape(region_avg, [], 1), 'descend');
+        [~, ix] = sort(reshape(region_avg, [], 1), 'descend');
         rank = zeros(size(region_n));
         rank(ix) = 1:length(ix);
 
@@ -78,21 +78,18 @@ function [rs,cs] = random_square(region_p, n)
 % probability equal to the contents of the cell (probabilities should
 % sum to 1).
     cums = cumsum(reshape(region_p, [], 1));
+    cums(end) = 1; % insurance against region_p not summing to 1
     position = rand(n,1);
-    rs = zeros(n,1);
-    cs = zeros(n,1);
+    m = size(region_p, 1);
+    loc = zeros(n,1);
     
     for i = 1:n
         % We wish to find the first entry in cums which is > position. This is
         % because cums contains the end of the interval representing each item.
-        loc = find(cums > position(i), 1, 'first');
-        if isempty(loc)
-            % This is only true if sum(region_p) < 1.
-            loc = length(cums);
-        end
-    
-        [rs(i),cs(i)] = ind2sub(size(region_p), loc);
+        loc(i) = find(cums > position(i), 1, 'first');
     end
+    
+    [rs,cs] = ind2sub(size(region_p), loc);
 end
 
 function [x,y] = sample_in(x_range, y_range, m, r, c)
