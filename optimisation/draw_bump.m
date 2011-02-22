@@ -3,7 +3,7 @@ function draw_bump(granularity)
         granularity = 0.03;
     end
     
-    [x,y] = meshgrid(0:granularity:10, 0:granularity:10);
+    [x,y] = meshgrid(0:granularity:10);
     b = bump(x,y);
     b(bump_penalty(x,y) ~= 0) = NaN;
     
