@@ -81,15 +81,14 @@ function [rs,cs] = random_square(region_p, n)
     cums(end) = 1; % insurance against region_p not summing to 1
     position = rand(n,1);
     m = size(region_p, 1);
-    loc = zeros(n,1);
-    
-    for i = 1:n
-        % We wish to find the first entry in cums which is > position. This is
-        % because cums contains the end of the interval representing each item.
-        loc(i) = find(cums > position(i), 1, 'first');
-    end
-    
-    [rs,cs] = ind2sub(size(region_p), loc);
+
+    mat = bsxfun(@gt, cums, position');
+
+    [~, loc] = max(mat, [], 1);
+
+    k = size(region_p, 1);
+    rs = rem(loc'-1, k)+1;
+    cs = (loc'-rs)/k + 1;
 end
 
 function [x,y] = sample_in(x_range, y_range, m, r, c)
