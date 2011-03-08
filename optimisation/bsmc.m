@@ -78,13 +78,9 @@ function [rs,cs] = random_square(region_p, n)
 % probability equal to the contents of the cell (probabilities should
 % sum to 1).
     cums = cumsum(reshape(region_p, [], 1));
-    cums(end) = 1; % insurance against region_p not summing to 1
-    position = rand(n,1);
-    m = size(region_p, 1);
+    cums = cums/cums(end); % just in case they don't sum to 1
 
-    mat = bsxfun(@gt, cums, position');
-
-    [~, loc] = max(mat, [], 1);
+    [~, loc] = histc(rand(1,n),[0;cums]);
 
     k = size(region_p, 1);
     rs = rem(loc'-1, k)+1;
