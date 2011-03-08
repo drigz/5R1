@@ -31,6 +31,11 @@ function ark = archive_add(ark, args, objs)
         
         ark.objs = sorted_objs(1:new_size);
         ark.args = unsorted_args(ix(1:new_size), :);
+    elseif strcmp(ark.type, 'single')
+        unsorted_args = [ark.args; args];
+        [best_obj, best_ix] = max([ark.objs; objs]);
+        ark.objs = best_obj;
+        ark.args = unsorted_args(best_ix, :);
     elseif strcmp(ark.type, 'complete')
         ark.objs = [ark.objs; objs];
         ark.args = [ark.args; args];
