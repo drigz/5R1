@@ -1,5 +1,7 @@
-function ark = bsmc(f, x_range, y_range, penalty, m, pressure, ark)
-% bsmc(f, x_range, y_range, penalty, m, pressure, ark) performs a Biased
+function ark = bsmc(f, x_range, y_range, penalty, ...
+        m, initial_samples, pressure, ark)
+% bsmc(f, x_range, y_range, penalty, ...
+%       m, initial_samples, pressure, ark) performs a Biased
 % Selection Monte Carlo maximisation of the 2-D function f.
 % f(x, y): the function to be minimised
 % x_range, y_range: 2-entry vectors indicating a bounding-box of the
@@ -7,6 +9,8 @@ function ark = bsmc(f, x_range, y_range, penalty, m, pressure, ark)
 % penalty(x, y): a function == 0 in allowable space, and < 0 in disallowed
 %                space
 % m: the number of intervals to divide each axis into (=> m^2 regions)
+% initial_samples: the number of samples per region before biasing
+%       (if m^2*initial_samples > 5000, the algorithm fails)
 % pressure: a number >= 1 controlling how heavily we bias the selection
 % ark: a list of empty archives
 %
@@ -18,7 +22,13 @@ function ark = bsmc(f, x_range, y_range, penalty, m, pressure, ark)
     M = m^2; % number of regions
     
     samples_remaining = 5000; % Enforces maximum number of samples
-    
+
+    % check for invalid parameters
+    if M * initial_samples > samples_remaining
+        ark = archive_add(ark, [0 0], 0);
+        return
+    end
+
     while samples_remaining > 0
         if isempty(region_p)
             % A constant number of initial samples in each square are
@@ -26,9 +36,9 @@ function ark = bsmc(f, x_range, y_range, penalty, m, pressure, ark)
             [r,c] = meshgrid(1:m);
             r = reshape(r, [], 1);
             c = reshape(c, [], 1);
-            r = repmat(r, 5, 1);
-            c = repmat(c, 5, 1);
-            samples_remaining = samples_remaining - 5*M;
+            r = repmat(r, initial_samples, 1);
+            c = repmat(c, initial_samples, 1);
+            samples_remaining = samples_remaining - initial_samples*M;
         else
             % Choose the number of samples to take before re-evaluating
             % region probabilities.
