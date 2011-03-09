@@ -5,6 +5,8 @@ function results = evaluate(f, n_iters, varargin)
 
     results = struct('args', cell(n_combinations, 1), 'mean', 0, 'std', 0);
 
+    p = progressbar();
+
     for arg_ind = 1:n_combinations
         [arg_sub{1:n_args}] = ind2sub(arg_counts, arg_ind);
 
@@ -23,4 +25,7 @@ function results = evaluate(f, n_iters, varargin)
         results(arg_ind).std = std(objs);
 
         save('results.mat');
+
+        p = setStatus(p, arg_ind/n_combinations);
+        display(p);
     end
