@@ -16,7 +16,7 @@ function [ark, diag] = sa(f, penalty, ark, ...
 % penalty([x y]): a function == 0 in allowable space, and < 0 in disallowed
 %                space
 % ark: a list of empty archives
-% step_method: 'uniform' or 'parks' giving step size update method
+% step_method: 'uniform', 'gaussian' or 'parks' giving step size update method
 % init_step_size: initial step size
 % penalty_weight: constant factor on penalty function
 % initial_temp: 'kirkpatrick', 'white' or a number giving initial temp
@@ -35,6 +35,8 @@ function [ark, diag] = sa(f, penalty, ark, ...
     step_size = init_step_size;
     position = [5 5];
     objective = f(position);
+    % penalised objective
+    objective_pen = objective;
 
     samples_remaining = 5000-1;
 
@@ -69,9 +71,18 @@ function [ark, diag] = sa(f, penalty, ark, ...
             best_time = samples_remaining;
             position = best_pos;
             objective = best_obj;
+            objective_pen = best_obj + penalty_weight * penalty(position) / T;
+
+            % reset step size to avoid getting stuck with bad step size
+            step_size = init_step_size;
         end
 
-        step = step_size .* (2*rand(1,2)-1);
+        if strcmp(step_method, 'gaussian')
+            step = step_size .* randn(1,2);
+        else
+            step = step_size .* (2*rand(1,2)-1);
+        end
+
 
         new_penalty = penalty_weight * penalty(position+step);
 
@@ -80,41 +91,45 @@ function [ark, diag] = sa(f, penalty, ark, ...
             continue;
         end
 
-        new_objective = f(position+step) + new_penalty / T;
+        new_objective = f(position+step);
+        new_objective_pen = new_objective + new_penalty / T;
         samples_remaining = samples_remaining - 1;
 
-        diag.trials{ctemp} = [diag.trials{ctemp}; position+step new_objective];
+        diag.trials{ctemp} = [diag.trials{ctemp};
+                              position+step new_objective_pen];
 
         num_trials = num_trials + 1;
 
         % only archive valid solutions
         if new_penalty == 0
             ark = archive_add(ark, position+step, new_objective);
-        end
 
-        % update reset counters
-        if objective > best_obj
-            best_obj = objective;
-            best_pos = position;
-            best_time = samples_remaining;
+            % update reset counters
+            if new_objective > best_obj
+                best_obj = new_objective;
+                best_pos = position+step;
+                best_time = samples_remaining;
+            end
         end
 
         % calculate acceptance probability
         if strcmp(step_method, 'parks')
-            p = exp(- (objective - new_objective) / (T * norm(step)));
+            p = exp(- (objective_pen - new_objective_pen) / (T * norm(step)));
         else
-            p = exp(- (objective - new_objective) / T);
+            p = exp(- (objective_pen - new_objective_pen) / T);
         end
 
         % accept change with probability 1-p
         if rand() < p
-            diag.accepts{ctemp} = [diag.accepts{ctemp}; position+step new_objective];
+            diag.accepts{ctemp} = [diag.accepts{ctemp};
+                                   position+step new_objective_pen];
 
             num_acceptances = num_acceptances + 1;
-            objective_changes = [objective_changes new_objective-objective];
+            objective_changes = [objective_changes new_objective_pen-objective_pen];
 
             position = position + step;
             objective = new_objective;
+            objective_pen = new_objective_pen;
 
             % update step size info (if out of initial survey)
             if T ~= inf && strcmp(step_method, 'parks')
@@ -122,7 +137,8 @@ function [ark, diag] = sa(f, penalty, ark, ...
                        alpha * omega * abs(step);
             end
         else
-            diag.rejects{ctemp} = [diag.rejects{ctemp}; position+step new_objective];
+            diag.rejects{ctemp} = [diag.rejects{ctemp};
+                                   position+step new_objective_pen];
         end
 
         % consider reducing temperature
@@ -159,8 +175,8 @@ function [ark, diag] = sa(f, penalty, ark, ...
 
             ctemp = ctemp+1;
             diag.temps(ctemp) = T;
-            diag.trials{ctemp} = [position objective];
-            diag.accepts{ctemp} = [position objective];
+            diag.trials{ctemp} = [position objective_pen];
+            diag.accepts{ctemp} = [position objective_pen];
             diag.rejects{ctemp} = [];
         end
     end
