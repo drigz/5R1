@@ -37,13 +37,15 @@ function [ark, diag] = sa(f, penalty, ark)
 
     while samples_remaining > 0
         step = step_size .* (2*rand(1,2)-1);
+        
+        new_penalty = penalty(position+step);
 
         % ignore all invalid solutions in the initial survey
-        if T == inf && penalty(position+step) ~= 0
+        if T == inf && new_penalty ~= 0
             continue;
         end
 
-        new_objective = f(position+step) + penalty(position+step);
+        new_objective = f(position+step) + new_penalty;
         samples_remaining = samples_remaining - 1;
 
         diag.trials{ctemp} = [diag.trials{ctemp}; position+step new_objective];
@@ -51,7 +53,7 @@ function [ark, diag] = sa(f, penalty, ark)
         num_trials = num_trials + 1;
 
         % only archive valid solutions
-        if penalty(position+step) == 0
+        if new_penalty == 0
             ark = archive_add(ark, position+step, new_objective);
         end
 
