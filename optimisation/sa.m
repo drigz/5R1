@@ -147,8 +147,8 @@ function [ark, diag] = sa(f, penalty, ark, ...
             if num_trials >= initial_trials
                 % set initial temperature
                 if strcmp(initial_temp, 'kirkpatrick')
-                    df_plus = mean(objective_changes(objective_changes > 0));
-                    T = - df_plus / log(0.8);
+                    df_neg = - mean(objective_changes(objective_changes < 0));
+                    T = - df_neg / log(0.8);
                 elseif strcmp(initial_temp, 'white')
                     T = std(objective_changes);
                 else
