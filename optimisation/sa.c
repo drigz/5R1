@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <string.h>
 
 enum {
     uniform,
@@ -83,8 +85,10 @@ float T_kirkpatrick(float x[], int n)
     for (int i=0; i<n; i++)
     {
         if (x[i] < 0)
+        {
             sx_neg += -x[i];
-        n_neg++;
+            n_neg++;
+        }
     }
 
     return - (sx_neg / n_neg) / logf(0.8);
@@ -92,7 +96,7 @@ float T_kirkpatrick(float x[], int n)
 
 float sa(unsigned seed)
 {
-    srandomdev(); //srandom(seed);
+    srandom(seed);
 
     float T;
     if (initial_temp_method != constant)
@@ -252,24 +256,63 @@ float sa(unsigned seed)
     return best_obj;
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    step_method = uniform;
-    init_step_size = 1;
-    penalty_weight = 0.05;
-    initial_temp_method = kirkpatrick; initial_temp = 0.15;
-    temp_length = 100;
-    temp_decay_method = constant;
-    temp_decay = 0.95;
-
-    float results[5000];
-
-    for (int i=0; i<2000; i++)
+    if (argc != 8)
     {
-        results[i] = sa(i);
+        printf("needs 7 args\n");
+        return 1;
     }
 
-    printf("%g, %g\n", (double)mean(results, 2000), (double)std(results, 2000));
+    int n_iters = atoi(argv[1]);
+
+    if (strcmp(argv[2], "uniform") == 0)
+        step_method = uniform;
+    else if (strcmp(argv[2], "gaussian") == 0)
+        step_method = gaussian;
+    else if (strcmp(argv[2], "parks") == 0)
+        step_method = parks;
+    else
+    {
+        printf("unknown step method\n");
+        return 1;
+    }
+
+    init_step_size = atof(argv[3]);
+    penalty_weight = atof(argv[4]);
+    
+    if (strcmp(argv[5], "kirkpatrick") == 0)
+        initial_temp_method = kirkpatrick;
+    else if (strcmp(argv[5], "white") == 0)
+        initial_temp_method = white;
+    else
+    {
+        initial_temp_method = constant;
+        initial_temp = atof(argv[5]);
+    }
+
+    temp_length = atoi(argv[6]);
+    
+    if (strcmp(argv[7], "huang") == 0)
+        temp_decay_method = huang;
+    else
+    {
+        temp_decay_method = exponential;
+        temp_decay = atof(argv[7]);
+    }
+
+    float results[n_iters];
+
+    for (int i=0; i<n_iters; i++)
+    {
+        results[i] = sa(getpid() * n_iters + i);
+    }
+
+    float m = mean(results, n_iters);
+    float s = std(results, n_iters);
+
+    printf("N(%g, %g)\n", m, s);
+    printf("[%g, %g]\n", m-2*s/sqrt(n_iters), m+2*s/sqrt(n_iters));
 
     return 0;
 }
