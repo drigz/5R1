@@ -10,7 +10,7 @@ function results = evaluate(f, n_iters, varargin)
     for arg_ind = 1:n_combinations
         [arg_sub{1:n_args}] = ind2sub(arg_counts, arg_ind);
 
-        args = num2cell(arrayfun(@(i) varargin{i}(arg_sub{i}), 1:n_args));
+        args = arrayfun(@(i) varargin{i}{arg_sub{i}}, 1:n_args, 'UniformOutput', false);
 
         objs = zeros(n_iters, 1);
         for i = 1:n_iters
