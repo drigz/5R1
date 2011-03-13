@@ -339,13 +339,13 @@ int main(int argc, char **argv)
     for (int i=0; i<n_iters; i++)
     {
         results[i] = sa(i);
+        //printf("%g\n", results[i]);
     }
 
     real m = mean(results, n_iters);
     real s = std(results, n_iters);
 
-    printf("N(%g, %g)\n", m, s);
-    printf("[%g, %g]\n", m-2*s/sqrt(n_iters), m+2*s/sqrt(n_iters));
+    printf("%g %g\n", m, s);
 
     return 0;
 }
