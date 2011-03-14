@@ -154,6 +154,14 @@ other parameters to optimise the performance. This allows us to view the
 performance as a function of a single variable, which makes it easier to
 visualise and explain.
 
+More formally, given a performance measure $o(\theta_1, \theta_2, \dots,
+\theta_k)$, we consider the $k$ different functions:
+
+  \begin{equation*}
+    o_i(\theta_i) = \max_{\theta_1 \dots \theta_{i-1}, \theta_{i+1} \dots
+    \theta_{k}} o(\theta_1 \dots \theta_k)
+    \end{equation*}
+
 \subsection{Penalty Function}
 
 The same penalty function was used in both the BMCS and SA algorithms:
@@ -281,7 +289,7 @@ Some insights that can be drawn from these plots:
       \item High selection pressure
     \end{itemize}
     leads to the very high result variances seen in the ``jet''.
-    Figure~\ref{fig:unreliable_bmcs} shows why this is: with large regions and
+    Figure~\ref{fig:bmcs_unreliable} shows why this is: with large regions and
     few initial samples, there is a high probability that the initial samples
     represent the objective function in the region badly---the regions
     contain both optima and zeroes of the function. The high selection
@@ -301,7 +309,7 @@ Some insights that can be drawn from these plots:
       }
       \end{center}
       \caption{Small regions leading to an unreliable BMCS}
-      \label{fig:unreliable_bmcs}
+      \label{fig:bmcs_unreliable}
       \end{figure}
 
   \item
@@ -316,12 +324,85 @@ Some insights that can be drawn from these plots:
 
 \begin{figure}
   \begin{center}
-    \includegraphics{bmcs_perf_summary.eps}
+    \includegraphics[width=10cm]{bmcs_perf_summary.eps}
     \end{center}
     \caption{Summary of patterns in BMCS performance}
     \label{fig:bmcs_perf_summary}
     \end{figure}
-\end{itemize}<++>
 
+\end{itemize}
+
+\subsection{Effects of Individual Parameters}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{bmcs_plots.eps}
+    \end{center}
+    \caption{The effects of constraining individual parameters on best
+    performance}
+    \label{fig:bmcs_plots}
+    \end{figure}
+
+Figure~\ref{fig:bmcs_plots} shows how the performance is affected by
+difference parameters. These plots use the method described in
+section~\ref{sec:vis_perf}---for each plot, the named parameter is varied and
+the others are chosen separately for each point to maximise the mean result.
+The blue points are shown with very small blue error bars that indicate the
+uncertainty in the estimation of $\mu$. The red error bars stretch $2 \sigma$
+in both directions: they are meant to indicate the variability of the
+algorithm's performance. Because the result is not normally distributed,
+they stretch beyond the maximum possibly result.
+
+\subsection{Summary of BMCS Parameters}
+
+As shown in figures \ref{fig:bmcs_perf_summary} \& \ref{fig:bmcs_plots}, the
+parameters that are critical to good performance on this problem are the
+penalty weighting factor and the selection pressure. However, appropriate
+region sizes and initial samples make the algorithm more robust against
+changes in other parameters.
+
+\begin{description}
+  \item[Penalty factor] \hfill \\
+    If this is much too small, the algorithm may waste time sampling in
+    infeasible space. However, if it is too high and the selection pressure is
+    high, the algorithm may completely fail to sample optima near constraints.
+
+  \item[Region size] \hfill \\
+    If this is much too small (large $m$), the algorithm may waste time in the
+    initial survey. If regions are too large, the algorithm becomes very
+    sensitive to bad settings of other parameters.
+    Figure~\ref{fig:bmcs_perf_scatters} shows how small regions ($m \geq 20$)
+    guarantee reasonable performance with the tested parameter ranges.
+
+  \item[Number of initial samples] \hfill \\
+    This does not have a particularly great effect on the algorithms
+    performance. If the other parameters are set well then just one sample
+    per region suffices for good performance, and allows more samples to be
+    directed at promising regions. However, setting this $\geq 4$ provides
+    protection against the failure shown in figure~\ref{fig:bmcs_unreliable}.
+
+  \item[Selection pressure] \hfill \\
+    This plays an important part in making the algorithm efficient.
+    Figure~\ref{fig:bmcs_plots} shows that with $S \leq 3$, the algorithm's
+    performance is significantly worse, as it doesn't focus its efforts near
+    the optima. Setting it very high allows the best performance with
+    well-chosen parameters, but causes problems when the regions are too
+    small.
+
+\end{description}
+
+The best performing parameter settings tested:
+
+\vspace{5pt}
+
+\begin{tabular}{cccc}
+  \
+  \mcode{penalty_factor} & 
+  \mcode{m} &
+  \mcode{initial_samples} &
+  \mcode{pressure} \\
+  \hline
+  0.1 & 15 & 1 & 16 \\
+  \end{tabular}<++>
 
 \end{document}
