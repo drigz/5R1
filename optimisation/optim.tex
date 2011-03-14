@@ -164,6 +164,8 @@ More formally, given a performance measure $o(\theta_1, \theta_2, \dots,
 
 \subsection{Penalty Function}
 
+\label{sec:penalty}
+
 The same penalty function was used in both the BMCS and SA algorithms:
 \begin{IEEEeqnarray*}{rCll}
   c(\boldsymbol{x}) &=& \min(x_1 - 0,& 0)\ + \\
@@ -425,7 +427,7 @@ parameters.
   \begin{center}
     \includegraphics[width=16cm]{bmcs_dissim.eps}
     \end{center}
-    \caption{Dissimilary archives from the BMCS algorithm}
+    \caption{Dissimilarity archives from the BMCS algorithm}
     \label{fig:bmcs_dissim}
     \end{figure}
 
@@ -439,5 +441,61 @@ noise, resulting in over 8 billion function evaluations.
 By fully vectorising the MATLAB code for the BMCS implementation, the time
 required for a single run of the BMCS algorithm was reduced to 5ms, and the
 evaluation ran in about 2 hours on a mid-range laptop.
+
+\section{Simulated Annealing}
+
+Since the SA algorithm is more complicated, there were more design decisions
+made in the implementation, and more parameters could be varied.
+
+\begin{description}
+  \item[Initial Temperature Setting] \hfill \\
+    The algorithm can set the initial temperature one of three ways:
+    \begin{itemize}
+      \item $T_0$ given as a parameter to the algorithm.
+      \item $\displaystyle T_0 = \frac{\delta f^-}{\ln 0.8}$ where $\delta f^-$ is
+        the mean value of objective reductions encountered in an initial survey.
+        Due to Kirkpatrick. TODO Better citation
+      \item $T_0 = \sigma_0$ where $\sigma_0$ is the standard deviation of
+        objective changes encountered in the initial survey. Due to White. TODO
+        Better citation
+    \end{itemize}
+    In both adaptive cases the length of the initial survey was chosen as 500
+    function evaluations.
+
+  \item[Solution Generation] \hfill \\
+    The algorithm generates new candidate solutions by adding a random offset
+    to the current position. The random offset can be chosen in one of three
+    ways. Each way takes a step size parameter, $S$.
+    \begin{itemize}
+      \item Each dimension change is uniformly selected from the interval
+        $(-S, S)$.
+      \item Each dimension change is selected from a normal distribution with
+        zero mean and variance $S^2$.
+      \item Adaptive step sizes due to Parks TODO Better citation, as
+        described in the lecture notes. Here, $S$ is the initial maximum step
+        size.
+    \end{itemize}
+
+  \item[Constraint Handling] \hfill \\
+    As with BMCS, the penalty function described in section~\ref{sec:penalty}
+    is used, with a constant weight parameter, and invalid solutions are not
+    archived. The penalty is also multiplied by $T^{-1}$ as recommended in the
+    lecture notes.
+
+  \item[Annealing Schedule] \hfill \\
+    After an optional initial survey of 500 evaluations, the algorithm will
+    perform up to $L_k$ evaluations and up to $\lfloor 0.6 L_k \rfloor$
+    accepted solutions before reducing the temperature.  The temperature is
+    then reduced either by a constant factor TODO reference? or using TODO
+    better citation Huang's formulation.
+
+\end{description}
+
+\begin{figure}
+  \advance\leftskip-1cm
+  \includegraphics[clip, trim=1cm 0.75cm 0cm 0.75cm, width=18.5cm]{sa_perf_scatters.eps}
+  \caption{SA performance with varying parameters}
+  \label{fig:sa_perf_scatters}
+  \end{figure}
 
 \end{document}
