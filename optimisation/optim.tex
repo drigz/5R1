@@ -336,7 +336,7 @@ Some insights that can be drawn from these plots:
 
 \begin{figure}
   \begin{center}
-    \includegraphics{bmcs_plots.eps}
+    \includegraphics[width=15cm]{bmcs_plots.eps}
     \end{center}
     \caption{The effects of constraining individual parameters on best
     performance}
@@ -354,6 +354,7 @@ algorithm's performance. Because the result is not normally distributed,
 they stretch beyond the maximum possibly result.
 
 \subsection{Summary of BMCS Parameters}
+\label{sec:bmcs_summary}
 
 As shown in figures \ref{fig:bmcs_perf_summary} \& \ref{fig:bmcs_plots}, the
 parameters that are critical to good performance on this problem are the
@@ -395,14 +396,48 @@ The best performing parameter settings tested:
 
 \vspace{5pt}
 
-\begin{tabular}{cccc}
-  \
+\begin{tabular}{llll}
   \mcode{penalty_factor} & 
   \mcode{m} &
   \mcode{initial_samples} &
   \mcode{pressure} \\
   \hline
   0.1 & 15 & 1 & 16 \\
-  \end{tabular}<++>
+  \end{tabular}
+
+\subsection{Dissimilarity Archiving}
+
+Since it is harder to quantify the quality of a dissimilarity archive, the
+above approach focused on the best solution found.
+Figure~\ref{fig:bmcs_dissim} shows the contents of the dissimilarity archive
+after a run of the BMCS algorithm with the parameters in
+section~\ref{sec:bmcs_summary}. It also shows the results with a smaller
+region size, which appears to do a better job of locating the
+2$^\textrm{nd}$ highest peak (although not much can be drawn from a single
+run of the algorithm). Both results appear reasonable.
+
+A more full investigation of the problem could develop objective
+functions to characterise the quality of the dissimilarity archive, such as
+the sum of the values, and then investigate how this varies with the
+parameters.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=16cm]{bmcs_dissim.eps}
+    \end{center}
+    \caption{Dissimilary archives from the BMCS algorithm}
+    \label{fig:bmcs_dissim}
+    \end{figure}
+
+\subsection{Computational Cost}
+
+In order to run such an intensive evaluation of the algorithm, the
+implementation needed to be very efficient. 1620 parameter combinations were
+tested, each requiring 1000 runs of the algorithm to reduce the impact of
+noise, resulting in over 8 billion function evaluations.
+
+By fully vectorising the MATLAB code for the BMCS implementation, the time
+required for a single run of the BMCS algorithm was reduced to 5ms, and the
+evaluation ran in about 2 hours on a mid-range laptop.
 
 \end{document}
