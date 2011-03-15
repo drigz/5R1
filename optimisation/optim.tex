@@ -6,6 +6,8 @@
 
 \usepackage{units}
 
+\usepackage{cite}
+
 \usepackage{subfigure}
 
 \usepackage[retainorgcmds]{IEEEtrantools}
@@ -73,7 +75,7 @@ boundaries.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[height=9cm]{bump_3d_smooth.eps}
+    \includegraphics[height=9cm]{bump_3d_smooth.pdf}
     \end{center}
     \caption{Keane's 2-D Bump}
     \label{fig:bump_3d}
@@ -91,7 +93,7 @@ solution found is recorded. To get an impression of the performance, we can
 consider the mean $\mu$ and standard deviation $\sigma$ of the results. This
 can be likened to approximating the distribution of the results as a Gaussian,
 and matching the first and second moments. This approximation can be very bad,
-as shown in figure~\ref{fig:result_dist}, but it serves to indicate the
+as shown in Figure~\ref{fig:result_dist}, but it serves to indicate the
 performance of the algorithm. In the cases shown, the Gaussians predict 6\%
 and 38\% chances of a result exceeding the global optimum.
 
@@ -99,10 +101,10 @@ and 38\% chances of a result exceeding the global optimum.
   \begin{center}
     \mbox{
       \subfigure{
-        \includegraphics[width=8cm]{bmcs_dist.eps}
+        \includegraphics[width=8cm]{bmcs_dist.pdf}
       }
       \subfigure{
-        \includegraphics[width=8cm]{sa_dist.eps}
+        \includegraphics[width=8cm]{sa_dist.pdf}
       }
     }
     \end{center}
@@ -116,7 +118,7 @@ example, in 95\% of cases the result would be above $\mu - 1.645 \sigma$. It
 would be more accurate to directly estimate the $5^\textrm{th}$ percentile
 from the data and perhaps this should have been used instead. However, one
 feature of the Gaussian approach is that it penalises rare, catastrophic
-failures heavily.  For the SA results in figure~\ref{fig:result_dist}, the
+failures heavily.  For the SA results in Figure~\ref{fig:result_dist}, the
 approximated and actual $5^\textrm{th}$  percentiles are 0.338 and 0.358,
 respectively.
 
@@ -148,7 +150,7 @@ this report is not to find the best parameters for this problem, but to gain
 an understanding of how they affect the performance. For this purpose, we need
 to be able to see how a single parameter changes the performance, but this is
 complicated by the settings of the other
-parameters---figure~\ref{fig:bmcs_perf_scatters} shows how complicated this is.  To take
+parameters---Figure~\ref{fig:bmcs_perf_scatters} shows how complicated this is.  To take
 this into account, for a given setting of one parameter we can choose the
 other parameters to optimise the performance. This allows us to view the
 performance as a function of a single variable, which makes it easier to
@@ -183,7 +185,8 @@ not investigated.
 
 \subsection{Archiving}
 
-Archiving was implemented exactly as described in the lecture notes. The same
+Archiving was implemented exactly as described in the lecture
+notes\cite{lnotes}. The same
 archiving code was used for the BMCS and SA implementations, and the algorithm
 implementations themselves are independent of the number and type of archives
 used. One downside of this low-coupling approach is that an implementation
@@ -193,9 +196,9 @@ seen so far, and restart from there if necessary.
 
 \section{Biased Monte Carlo Sampling}
 
-The BMCS algorithm is much like that shown in lectures. Each axis range is
-divided into $m$ equally sized ranges, for a total of $m^2$ regions. To
-determine initial region probabilities it samples a certain number of times
+The BMCS algorithm is much like that shown in lectures\cite{lnotes}. Each axis
+range is divided into $m$ equally sized ranges, for a total of $m^2$ regions.
+To determine initial region probabilities it samples a certain number of times
 per region, then uses the average objective observed in each region to rank
 them. The linear selection probability relationship is used to translate the
 ranks to probabilities. 1000 random samples are made according to these
@@ -240,13 +243,13 @@ values were chosen for investigation:
 
 The algorithm was run for every combination of these values: a total of 1,620
 combinations. For each combination, it was run $n = 1000$ times, as described
-in section~\ref{sec:quant_perf}. Figure~\ref{fig:bmcs_perf_scatters} shows the
+in Section~\ref{sec:quant_perf}. Figure~\ref{fig:bmcs_perf_scatters} shows the
 results.
 
 \begin{figure}
   % thank god LaTeX frees me from worrying about layout!
   \advance\leftskip-1cm
-  \includegraphics[clip, trim=1.5cm 0.75cm 1.5cm 0.75cm, width=18.5cm]{bmcs_perf_scatters.eps}
+  \includegraphics[clip, trim=1.5cm 0.75cm 1.5cm 0.75cm, width=18.5cm]{bmcs_perf_scatters.pdf}
   \caption{BMCS performance with varying parameters}
   \label{fig:bmcs_perf_scatters}
   \end{figure}
@@ -303,10 +306,10 @@ Some insights that can be drawn from these plots:
     \begin{center}
       \fbox{
         \subfigure{
-          \includegraphics[clip,trim=0.5cm 0cm 0cm 0cm,width=8.5cm]{bmcs_unreliable.eps}
+          \includegraphics[clip,trim=0.5cm 0cm 0cm 0cm,width=8.5cm]{bmcs_unreliable.pdf}
         }
         \subfigure{
-          \includegraphics[clip,trim=2cm 0cm 2cm 0cm,width=6.5cm]{bmcs_unreliable_regions.eps}
+          \includegraphics[clip,trim=2cm 0cm 2cm 0cm,width=6.5cm]{bmcs_unreliable_regions.pdf}
         }
       }
       \end{center}
@@ -326,7 +329,7 @@ Some insights that can be drawn from these plots:
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=10cm]{bmcs_perf_summary.eps}
+    \includegraphics[width=10cm]{bmcs_perf_summary.pdf}
     \end{center}
     \caption{Summary of patterns in BMCS performance}
     \label{fig:bmcs_perf_summary}
@@ -338,7 +341,7 @@ Some insights that can be drawn from these plots:
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=15cm]{bmcs_plots.eps}
+    \includegraphics[width=15cm]{bmcs_plots.pdf}
     \end{center}
     \caption{The effects of constraining individual parameters on best
     performance}
@@ -347,7 +350,7 @@ Some insights that can be drawn from these plots:
 
 Figure~\ref{fig:bmcs_plots} shows how the performance is affected by
 difference parameters. These plots use the method described in
-section~\ref{sec:vis_perf}---for each plot, the named parameter is varied and
+Section~\ref{sec:vis_perf}---for each plot, the named parameter is varied and
 the others are chosen separately for each point to maximise the mean result.
 The blue points are shown with very small blue error bars that indicate the
 uncertainty in the estimation of $\mu$. The red error bars stretch $2 \sigma$
@@ -358,7 +361,7 @@ they stretch beyond the maximum possibly result.
 \subsection{Summary of BMCS Parameters}
 \label{sec:bmcs_summary}
 
-As shown in figures \ref{fig:bmcs_perf_summary} \& \ref{fig:bmcs_plots}, the
+As shown in Figures \ref{fig:bmcs_perf_summary} \& \ref{fig:bmcs_plots}, the
 parameters that are critical to good performance on this problem are the
 penalty weighting factor and the selection pressure. However, appropriate
 region sizes and initial samples make the algorithm more robust against
@@ -382,7 +385,7 @@ changes in other parameters.
     performance. If the other parameters are set well then just one sample
     per region suffices for good performance, and allows more samples to be
     directed at promising regions. However, setting this $\geq 4$ provides
-    protection against the failure shown in figure~\ref{fig:bmcs_unreliable}.
+    protection against the failure shown in Figure~\ref{fig:bmcs_unreliable}.
 
   \item[Selection pressure] \hfill \\
     This plays an important part in making the algorithm efficient.
@@ -408,12 +411,13 @@ The best performing parameter settings tested:
   \end{tabular}
 
 \subsection{Dissimilarity Archiving}
+\label{sec:bmcs_dissim}
 
 Since it is harder to quantify the quality of a dissimilarity archive, the
 above approach focused on the best solution found.
 Figure~\ref{fig:bmcs_dissim} shows the contents of the dissimilarity archive
 after a run of the BMCS algorithm with the parameters in
-section~\ref{sec:bmcs_summary}. It also shows the results with a smaller
+Section~\ref{sec:bmcs_summary}. It also shows the results with a smaller
 region size, which appears to do a better job of locating the
 2$^\textrm{nd}$ highest peak (although not much can be drawn from a single
 run of the algorithm). Both results appear reasonable.
@@ -425,7 +429,7 @@ parameters.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=16cm]{bmcs_dissim.eps}
+    \includegraphics[width=16cm]{bmcs_dissim.pdf}
     \end{center}
     \caption{Dissimilarity archives from the BMCS algorithm}
     \label{fig:bmcs_dissim}
@@ -440,7 +444,7 @@ noise, resulting in over 8 billion function evaluations.
 
 By fully vectorising the MATLAB code for the BMCS implementation, the time
 required for a single run of the BMCS algorithm was reduced to 5ms, and the
-evaluation ran in about 2 hours on a mid-range laptop.
+evaluation ran in about 2 hours on a notebook computer.
 
 \section{Simulated Annealing}
 
@@ -453,11 +457,10 @@ made in the implementation, and more parameters could be varied.
     \begin{itemize}
       \item $T_0$ given as a parameter to the algorithm.
       \item $\displaystyle T_0 = \frac{\delta f^-}{\ln 0.8}$ where $\delta f^-$ is
-        the mean value of objective reductions encountered in an initial survey.
-        Due to Kirkpatrick. TODO Better citation
+        the mean value of objective reductions encountered in an initial
+        survery \cite{kirk}.
       \item $T_0 = \sigma_0$ where $\sigma_0$ is the standard deviation of
-        objective changes encountered in the initial survey. Due to White. TODO
-        Better citation
+        objective changes encountered in the initial survey \cite{white:261}.
     \end{itemize}
     In both adaptive cases the length of the initial survey was chosen as 500
     function evaluations.
@@ -471,13 +474,13 @@ made in the implementation, and more parameters could be varied.
         $(-S, S)$.
       \item Each dimension change is selected from a normal distribution with
         zero mean and variance $S^2$.
-      \item Adaptive step sizes due to Parks TODO Better citation, as
+      \item Adaptive step sizes\cite{parks}, as
         described in the lecture notes. Here, $S$ is the initial maximum step
         size.
     \end{itemize}
 
   \item[Constraint Handling] \hfill \\
-    As with BMCS, the penalty function described in section~\ref{sec:penalty}
+    As with BMCS, the penalty function described in Section~\ref{sec:penalty}
     is used, with a constant weight parameter, and invalid solutions are not
     archived. The penalty is also multiplied by $T^{-1}$ as recommended in the
     lecture notes.
@@ -486,16 +489,224 @@ made in the implementation, and more parameters could be varied.
     After an optional initial survey of 500 evaluations, the algorithm will
     perform up to $L_k$ evaluations and up to $\lfloor 0.6 L_k \rfloor$
     accepted solutions before reducing the temperature.  The temperature is
-    then reduced either by a constant factor TODO reference? or using TODO
-    better citation Huang's formulation.
+    then reduced either by a constant factor \cite{kirk82} or using a scheme
+    \cite{huang86}, as given in the lecture notes.
+
+  \item[Restarts] \hfill \\
+    The algorithm was found to frequently get stuck in local optima,
+    especially with adaptive step sizes. To work around this, if the algorithm
+    runs 500 evaluations without improving the best value seen so far, it
+    restarts from the best value, and resets the maximum step size to the
+    initial value.
 
 \end{description}
 
 \begin{figure}
   \advance\leftskip-1cm
-  \includegraphics[clip, trim=1cm 0.75cm 0cm 0.75cm, width=18.5cm]{sa_perf_scatters.eps}
+  \includegraphics[clip, trim=1cm 0.75cm 0cm 0.75cm, width=18.5cm]{sa_perf_scatters.pdf}
   \caption{SA performance with varying parameters}
   \label{fig:sa_perf_scatters}
   \end{figure}
+
+\subsection{Searching the Parameter Space}
+
+A similar search to that for BMCS was performed, although considerably more
+intensive:
+
+\begin{description}
+  \item[Solution generation] \hfill \\
+    Uniform, Gaussian or Adaptive (Parks)
+  \item[Initial maximum step size] \hfill \\
+    0.5, 0.75, 1.0, 1.5 or 2.0
+  \item[Penalty weight] \hfill \\
+    0.01 0.03 0.1 0.3 1.0
+  \item[Initial temperature] \hfill \\
+    Adaptive (Kirkpatrick), Adaptive (White), 0.07,
+    0.1, 0.2, 0.3, 0.5 or 1.0
+  \item[Temperature length $L_k$] \hfill \\
+    50, 100, 200, or 300
+  \item[Temperature decay] \hfill \\
+    Adaptive (Huang), 0.9, 0.92, 0.95, 0.97, 0.98 and
+    0.99
+    \end{description}
+
+This time, there is a total of 16,800 combinations. For each combination, it
+was run $n = 3000$ times, as described in Section~\ref{sec:quant_perf}.
+Figure~\ref{fig:sa_perf_scatters} shows the results. Note that because so many
+more datapoints were collected, these plots show random subsets of the data.
+
+Unfortunately, there are no patterns of the same clarity in this format, and
+so it is presented mainly for completeness. A few things can be seen, though:
+
+\begin{itemize}
+  \item Gaussian solution generation seems to give better performance in more
+    cases than the other techniques. However, top performance can be achieved
+    with all 3 methods.
+  \item Larger maximum step sizes (1.5 or 2) seem to give more consistent
+    results. It is possible that this is because they get stuck in local
+    optima less frequently, as they are able to step between the peaks of the
+    function.
+
+    Figure~\ref{fig:mean_var} suggests that this intuition is correct, but is
+    of limited use since the two parameter sets used differ greatly.
+
+  \item Similarly, higher initial temperatures seem to give more consistent
+    results than lower temperatures (or the adaptive methods). Again, this is
+    probably due to lower probability of getting caught in local optima, as
+    suggested by Figure~\ref{fig:mean_var}.
+  \item Smaller penalty weights once again give the best performance, it is
+    not such an important parameter as for BMCS. This is possibly because the
+    penalty is multiplied by $T^{-1}$.
+  \item The adaptive temperature reduction seems to perform worse in general
+    than the constant exponential approach. However, it is still capable of
+    achieving good performance.
+    \end{itemize}
+
+\begin{figure}
+  \begin{center}
+    \mbox{
+      \subfigure{
+        \includegraphics[width=8cm]{mean_var_steps.pdf}
+      }
+      \subfigure{
+        \includegraphics[width=8cm]{mean_var_temp.pdf}
+      }
+    }
+    \end{center}
+    \caption{Comparison of result distributions with similar means}
+    \label{fig:mean_var}
+    \end{figure}
+
+\subsection{Effects of Individual Parameters}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=13cm]{sa_plots.pdf}
+    \end{center}
+    \caption{The effects of constraining individual parameters on best
+    performance}
+    \label{fig:sa_plots}
+    \end{figure}
+
+Figure~\ref{fig:sa_plots} shows the results of the ``best performing''
+parameter sets, as described in Section~\ref{sec:vis_perf}---here, the
+performance metric used to choose which result to display is $\mu - 1.645
+\sigma$. These plots appear to back up some trends noticed in
+Figure~\ref{fig:sa_perf_scatters}. In particular, Gaussian solution generation
+and small penalty weightings seem to perform better. However, it also appears
+that low initial temperatures and small step sizes enable the best
+performance, which disagrees with what we observed earlier.
+
+It is possible that this approach to the problem is overfitting the
+parameters: that when the best performing selection out of thousands of
+different parameter combinations is chosen, an algorithm that regularly finds
+the optimum in this problem but might perform poorly in a similar problem can
+be considered best.
+
+\subsection{Summary of SA Parameters}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=8cm]{sa_and_bmcs.pdf}
+    \end{center}
+    \caption{Comparison of SA and BMCS results}
+    \label{fig:sa_and_bmcs}
+    \end{figure}
+
+Figure~\ref{fig:sa_and_bmcs} makes it clear that SA has the potential to
+perform better and more reliably than BMCS, if the parameters are chosen well.
+However, it also has the potential to perform very badly - much worse than the
+simplest random sampling approach. Unfortunately, it is much harder to see
+patterns in the performance, or to give general advice on maximising it.
+
+\begin{description}
+  \item[Solution generation] \hfill \\
+    As Figure~\ref{fig:adaptive} shows, adaptive solution generation can get
+    closer to the peak more often, because it can reduced the step size and
+    search area near the end of the search. However, it is more prone to only
+    finding the lower local optima, whereas non-adaptive solution generation
+    is less likely to fall into this trap.
+  \item[Initial maximum step size] \hfill \\
+    A trade-off must be made here: small steps allow pinpointing the optimum,
+    but large steps avoid becoming trapped in a local maximum. This parameter
+    has much less importance when adaptive step sizing is used, but that
+    brings its own problems.
+  \item[Penalty weight] \hfill \\
+    This parameter is not so important, perhaps since the penalty weight
+    changes as the temperature decreases, but as before lower weights seem to
+    perform slightly better.
+  \item[Initial temperature] \hfill \\
+    The two methods of adaptive temperature selection appear to perform
+    similarly. Better performance can be achieved by tuning the initial
+    temperature to fit with the other parameters.
+  \item[Temperature length $L_k$] \hfill \\
+    No clear effect is visible here---it appears to be highly dependent on
+    other parameters.
+  \item[Temperature decay] \hfill \\
+    The adaptive temperature reduction method appears to perform poorly on
+    this problem (unless other parameters are carefully chosen). The
+    exponential cooling scheme \cite{kirk82} with $\alpha = 0.95$
+    appears to perform satisfactorily.
+    \end{description}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=8cm]{adaptive.pdf}
+    \end{center}
+    \caption{Comparison of adaptive and non-adaptive solution generation}
+    \label{fig:adaptive}
+    \end{figure}
+
+\subsection{Dissimilarity Archiving}
+
+The comments of Section~\ref{sec:bmcs_dissim} apply here too: all that will be
+done to evaluate the quality of the dissimilarity archive is a visual
+examination. Figure~\ref{fig:sa_bmcs_dissim} shows the dissimilarity archive
+for the best performing SA algorithm, and that for the best performing BMCS
+algorithm for comparison.
+
+The SA algorithm leaves a worse dissimilarity archive: some local optima are
+completely ignored, and others are less well maximised. This is not
+surprising, since it focuses on finding the global optimum, rather than
+exploring any promising parts of the solution space.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=15cm]{sa_bmcs_dissim.pdf}
+    \end{center}
+    \caption{Dissimilarity archives for best performing SA and BMCS algorithms}
+    \label{fig:sa_bmcs_dissim}
+    \end{figure}
+
+\subsection{Computational Cost}
+
+The SA algorithm was first implemented in MATLAB. This made it very easy to
+stop the execution part-way through with the debugger, and to visualise
+intermediate stages. A debugging tool was written that allows the user to
+easily scroll through the different stages of the annealing schedule, to give
+an idea of how the search progresses as the temperature reduces.
+
+However, the performance of the MATLAB implementation is very poor. A single
+run of the algorithm takes around 0.6 seconds---the examination of the
+parameter space would have taken almost a year to execute with this
+implementation. To enable the investigation, the implementation was translated
+to C++, decreasing the time for a single optimisation to 0.6 milliseconds.
+With this implementation, the 252 billion function evaluations were conducted
+in about 10 hours on a notebook computer.
+
+\section{Conclusions}
+
+The Biased Monte Carlo Sampling algorithm was investigated, and found to
+perform best with small regions and high selection pressures. However, it was
+still unable to reliably get results close to the optimum. The Simulated
+Annealing algorithm was found to be able achieve much better performance, and
+with the right parameters, it could get within a small distance of the global
+optimum in a large majority of cases. Adaptive step sizing \cite{parks} and
+adaptive temperature initialisation \cite{kirk} \cite{white:261} were found to
+perform well, although not quite as reliably as the best-tuned
+initialisations.
+
+\bibliography{optim}{}
+\bibliographystyle{apalike}
 
 \end{document}
