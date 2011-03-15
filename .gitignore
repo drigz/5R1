@@ -1,4 +1,6 @@
 *.aux
 *.dvi
 *.ps
-*.pdf
+*.bbl
+*.blg
+*.eps
