@@ -67,7 +67,7 @@ is located at $[1.6009\ 0.4685]^\textrm{T}$, where the objective function is
 $0.36498$. There are many other local optima, both on and off the constraint
 boundaries.
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[height=9cm]{bump_3d_smooth.pdf}
     \end{center}
@@ -91,7 +91,7 @@ as shown in Figure~\ref{fig:result_dist}, but it serves to indicate the
 performance of the algorithm. In the cases shown, the Gaussians predict 6\%
 and 38\% chances of a result exceeding the global optimum.
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \mbox{
       \subfigure{
@@ -238,9 +238,10 @@ values were chosen for investigation:
 The algorithm was run for every combination of these values: a total of 1,620
 combinations. For each combination, it was run $n = 1000$ times, as described
 in Section~\ref{sec:quant_perf}. Figure~\ref{fig:bmcs_perf_scatters} shows the
-results.
+results, and Figure~\ref{fig:bmcs_perf_summary} summarises a few of the
+patterns visible.
 
-\begin{figure}
+\begin{figure}[tbp]
   % thank god LaTeX frees me from worrying about layout!
   \advance\leftskip-1cm
   \includegraphics[clip, trim=1.5cm 0.75cm 1.5cm 0.75cm, width=18.5cm]{bmcs_perf_scatters.pdf}
@@ -296,7 +297,7 @@ Some insights that can be drawn from these plots:
     completely ignored, and the search never discovers the optimum in the
     region.
 
-  \begin{figure}
+  \begin{figure}[tbp]
     \begin{center}
       \fbox{
         \subfigure{
@@ -321,7 +322,7 @@ Some insights that can be drawn from these plots:
     the centre of the space. Fewer, lower optima lead to a smaller, lower
     range of possible results, and as such smaller $\mu$ and $\sigma$.
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=10cm]{bmcs_perf_summary.pdf}
     \end{center}
@@ -333,7 +334,7 @@ Some insights that can be drawn from these plots:
 
 \subsection{Effects of Individual Parameters}
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=15cm]{bmcs_plots.pdf}
     \end{center}
@@ -404,6 +405,24 @@ The best performing parameter settings tested:
   0.1 & 15 & 1 & 16 \\
   \end{tabular}
 
+\subsection{Search Pattern}
+
+\begin{figure}[tbp]
+  \begin{center}
+    \includegraphics[width=8cm]{bmcs_search_pattern.pdf}
+    \end{center}
+    \caption{Search pattern of a BMCS search}
+    \label{fig:bmcs_search_pattern}
+    \end{figure}
+
+Figure~\ref{fig:bmcs_search_pattern} shows the solutions tested by one of the
+best performing BMCS algorithms. The grid is included, showing that the global
+optimum is in a region mostly occupied by invalid solutions. This demonstrates
+why lower penalty functions provided better performance on this problem. We
+can also see that the high selection pressure means that in the valleys
+between functions, only the single initial evaluation is performed before the
+region is completely abandoned.
+
 \subsection{Dissimilarity Archiving}
 \label{sec:bmcs_dissim}
 
@@ -421,7 +440,7 @@ functions to characterise the quality of the dissimilarity archive, such as
 the sum of the values, and then investigate how this varies with the
 parameters.
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=16cm]{bmcs_dissim.pdf}
     \end{center}
@@ -495,7 +514,7 @@ made in the implementation, and more parameters could be varied.
 
 \end{description}
 
-\begin{figure}
+\begin{figure}[tbp]
   \advance\leftskip-1cm
   \includegraphics[clip, trim=1cm 0.75cm 0cm 0.75cm, width=18.5cm]{sa_perf_scatters.pdf}
   \caption{SA performance with varying parameters}
@@ -556,7 +575,7 @@ so it is presented mainly for completeness. A few things can be seen, though:
     achieving good performance.
     \end{itemize}
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \mbox{
       \subfigure{
@@ -573,7 +592,7 @@ so it is presented mainly for completeness. A few things can be seen, though:
 
 \subsection{Effects of Individual Parameters}
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=13cm]{sa_plots.pdf}
     \end{center}
@@ -599,7 +618,7 @@ be considered best.
 
 \subsection{Summary of SA Parameters}
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=8cm]{sa_and_bmcs.pdf}
     \end{center}
@@ -612,6 +631,14 @@ perform better and more reliably than BMCS, if the parameters are chosen well.
 However, it also has the potential to perform very badly - much worse than the
 simplest random sampling approach. Unfortunately, it is much harder to see
 patterns in the performance, or to give general advice on maximising it.
+
+\begin{figure}[tbp]
+  \begin{center}
+    \includegraphics[width=8cm]{adaptive.pdf}
+    \end{center}
+    \caption{Comparison of adaptive and non-adaptive solution generation}
+    \label{fig:adaptive}
+    \end{figure}
 
 \begin{description}
   \item[Solution generation] \hfill \\
@@ -643,12 +670,23 @@ patterns in the performance, or to give general advice on maximising it.
     appears to perform satisfactorily.
     \end{description}
 
-\begin{figure}
+\subsection{Search Pattern}
+
+Figure~\ref{fig:sa_search_pattern} shows the progress of a successful
+Simulated Annealing search. Early on, the temperature is high and the
+algorithm accepts all but the most highly penalised solutions. Next, it
+appears to have adapted to a smaller step size and is moving between a few
+local optima. Later on, the search has progressed towards a less promising
+earlier. However, at this point it triggers the reset criterion, and moves to
+the best solution tested so far.  By the end of the search, it has heavily
+tested the area around the global optimum.
+
+\begin{figure}[htbp]
   \begin{center}
-    \includegraphics[width=8cm]{adaptive.pdf}
+    \includegraphics[width=12cm]{sa_search_pattern.pdf}
     \end{center}
-    \caption{Comparison of adaptive and non-adaptive solution generation}
-    \label{fig:adaptive}
+    \caption{SA Search Pattern}
+    \label{fig:sa_search_pattern}
     \end{figure}
 
 \subsection{Dissimilarity Archiving}
@@ -664,7 +702,7 @@ completely ignored, and others are less well maximised. This is not
 surprising, since it focuses on finding the global optimum, rather than
 exploring any promising parts of the solution space.
 
-\begin{figure}
+\begin{figure}[tbp]
   \begin{center}
     \includegraphics[width=15cm]{sa_bmcs_dissim.pdf}
     \end{center}
