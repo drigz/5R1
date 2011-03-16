@@ -10,9 +10,9 @@
 
 \usepackage{subfigure}
 
-\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{minted}
 
-\usepackage[numbered]{mcode}
+\usepackage[retainorgcmds]{IEEEtrantools}
 
 % required to get proper length monospace underscores
 \usepackage[T1]{fontenc}
@@ -23,10 +23,6 @@
 \begin{document}
 
 \title{Stochastic Optimisation}
-
-\renewcommand{\theenumi}{\alph{enumi}}
-\renewcommand{\theenumii}{\arabic{enumii}}
-\renewcommand{\labelenumii}{\theenumii.}
 
 % Remove the author field and the space associated with it
 % from the definition of maketitle!
@@ -43,8 +39,6 @@
  \par} \makeatother
 
 \maketitle
-
-\thispagestyle{empty}
 
 \section{Introduction}
 
@@ -178,7 +172,7 @@ The same penalty function was used in both the BMCS and SA algorithms:
   && \min(x_1 x_2 - 0.75,& 0)
   \end{IEEEeqnarray*}
 
-It is scaled by a configurable weight, given by the \mcode{penalty_factor}
+It is scaled by a configurable weight, given by the \texttt{penalty\_factor}
 variable. In general, we could use separate weights for every constraint, but
 since the variable scales are so similar in this problem, this possibility was
 not investigated.
@@ -215,11 +209,11 @@ The following parameters of the algorithm were investigated:
 \begin{tabular}{l | l}
   Parameter & Description \\
   \hline
-  \mcode{penalty_factor} & A constant weight used for the penalty function \\
-  \mcode{m} & The number of divisions of each axis \\
-  \mcode{initial_samples} & The number of samples to take, per region, before
+  \texttt{penalty\_factor} & A constant weight used for the penalty function \\
+  \texttt{m} & The number of divisions of each axis \\
+  \texttt{initial\_samples} & The number of samples to take, per region, before
   calculating region probabilities \\
-  \mcode{pressure} & The selection pressure, $S$, used when calculating region
+  \texttt{pressure} & The selection pressure, $S$, used when calculating region
   probabilities.
 \end{tabular}
 
@@ -233,10 +227,10 @@ values were chosen for investigation:
 \begin{tabular}{l | l l l l l l l l l}
   Parameter & \multicolumn{9}{l}{Values} \\
   \hline
-  \mcode{penalty_factor} & 0.01 & 0.1 & 1 & 3 & 10 & 30 \\
-  \mcode{m} & 5 & 10 & 15 & 20 & 25 & 30 \\
-  \mcode{initial_samples} & 1 & 2 & 3 & 4 & 5 \\
-  \mcode{pressure} & 1 & 1.25 & 1.5 & 1.75 & 2 & 3 & 4 & 8 & 16
+  \texttt{penalty\_factor} & 0.01 & 0.1 & 1 & 3 & 10 & 30 \\
+  \texttt{m} & 5 & 10 & 15 & 20 & 25 & 30 \\
+  \texttt{initial\_samples} & 1 & 2 & 3 & 4 & 5 \\
+  \texttt{pressure} & 1 & 1.25 & 1.5 & 1.75 & 2 & 3 & 4 & 8 & 16
   \end{tabular}
 
 \vspace{5pt}
@@ -402,10 +396,10 @@ The best performing parameter settings tested:
 \vspace{5pt}
 
 \begin{tabular}{llll}
-  \mcode{penalty_factor} & 
-  \mcode{m} &
-  \mcode{initial_samples} &
-  \mcode{pressure} \\
+  \texttt{penalty\_factor} & 
+  \texttt{m} &
+  \texttt{initial\_samples} &
+  \texttt{pressure} \\
   \hline
   0.1 & 15 & 1 & 16 \\
   \end{tabular}
@@ -708,5 +702,36 @@ initialisations.
 
 \bibliography{optim}{}
 \bibliographystyle{apalike}
+
+\pagebreak
+\appendix
+
+\section{Keane's Bump Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{bump.m}
+\inputminted[linenos,fontsize=\small]{matlab}{bump_penalty.m}
+
+\section{BMCS Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{bsmc.m}
+
+\section{Archiving Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{archive_new.m}
+\inputminted[linenos,fontsize=\small]{matlab}{archive_add.m}
+
+\section{BMCS Parameter Search Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{bsmc_wrapper.m}
+\inputminted[linenos,fontsize=\small]{matlab}{evaluate.m}
+
+\section{SA Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{sa.m}
+\inputminted[linenos,fontsize=\small]{c}{sa.c}
+
+\section{SA Parameter Search Code}
+
+\inputminted[linenos,fontsize=\small]{matlab}{cli_evaluate.m}
 
 \end{document}
