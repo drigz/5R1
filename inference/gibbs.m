@@ -20,30 +20,27 @@ end
 
 function theta = gibbs_sample(X, Y, sigma_true, K)
     [N, L] = size(X);
-    
+
     theta = randn(L, 1);
-    
+
     thetas = [];
-    
+
     for k = 1:K
         for i = 1:L
             theta_masked = theta;
             theta_masked(i) = 0;
             resid = Y - X * theta_masked;
-            
+
             Xi = X(:,i);
-            
+
             m = (resid' * Xi) / (Xi' * Xi);
             s = sigma_true / (Xi' * Xi);
-            
+
             theta(i) = m + s * randn();
-            
+
             thetas = [thetas theta];
         end
     end
-    
+
     %plot(thetas');
 end
-            
-    
-    
